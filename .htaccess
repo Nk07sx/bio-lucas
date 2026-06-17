@@ -1,0 +1,6 @@
+Options -Indexes
+RewriteEngine On
+
+# Redireciona /admin e /dashboard para as pastas certas
+RewriteRule ^admin/?$ /admin/index.html [L]
+RewriteRule ^dashboard/?$ /dashboard/index.html [L]

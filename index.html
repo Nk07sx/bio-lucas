@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#080808" />
+  <title>Lucas Aragão — Creator & Empreendedor</title>
+  <meta name="description" content="Treinamento, Comunidade, Serviços, Mentoria Individual e canal no YouTube." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:           #080808;
+      --bg-2:         #0d0d0d;
+      --blue:         #1a6eff;
+      --blue-2:       #5599ff;
+      --blue-soft:    rgba(26,110,255,0.18);
+      --text:         #ededed;
+      --text-2:       #b4b4b4;
+      --muted:        #6b6b6b;
+      --line:         rgba(255,255,255,0.08);
+      --line-strong:  rgba(255,255,255,0.16);
+      --glass:        rgba(255,255,255,0.04);
+      --glass-hover:  rgba(255,255,255,0.07);
+      --cream:        #f0f4ff;
+      --ink:          #0a1428;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-weight: 400;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.55;
+    }
+
+    /* AMBIENT GLOW LAYERS */
+    .ambient {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .ambient::before,
+    .ambient::after {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+    }
+    .ambient::before {
+      top: -200px; right: -150px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(26,110,255,0.18), transparent 70%);
+    }
+    .ambient::after {
+      bottom: -200px; left: -150px;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(85,153,255,0.10), transparent 70%);
+    }
+
+    /* GRID PATTERN BG */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(26,110,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26,110,255,0.018) 1px, transparent 1px);
+      background-size: 64px 64px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 24px 16px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       HERO
+    ═══════════════════════════════════════════════════ */
+    .hero {
+      padding: 12px 0 8px;
+      text-align: center;
+    }
+
+    .hero-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 18px 8px 8px;
+      background: rgba(255,255,255,0.04);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      box-shadow:
+        0 4px 20px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+      margin-bottom: 36px;
+    }
+
+    .hero-pill img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1.5px solid rgba(26,110,255,0.50);
+    }
+
+    .hero-pill .pill-name {
+      font-size: 13.5px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .hero-pill .pill-divider {
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    .hero-pill .pill-role {
+      font-size: 13px;
+      color: var(--text-2);
+      font-weight: 500;
+    }
+
+    .hero-pill .verified {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+
+    .manifesto {
+      font-family: 'Instrument Serif', 'Inter', serif;
+      font-style: italic;
+      font-weight: 400;
+      font-size: clamp(28px, 7vw, 38px);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      max-width: 380px;
+      margin: 0 auto 18px;
+    }
+
+    .welcome {
+      font-size: 14px;
+      color: var(--muted);
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      margin-bottom: 8px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       CARD — base
+    ═══════════════════════════════════════════════════ */
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--glass);
+      backdrop-filter: blur(16px) saturate(160%);
+      -webkit-backdrop-filter: blur(16px) saturate(160%);
+      border: 1px solid var(--line);
+      transition: all 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      isolation: isolate;
+    }
+
+    .card:hover {
+      background: var(--glass-hover);
+      border-color: var(--line-strong);
+      transform: translateY(-3px);
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.55),
+        0 0 30px rgba(26,110,255,0.12),
+        inset 0 1px 0 rgba(255,255,255,0.08);
+    }
+
+    .card:active { transform: translateY(0); }
+
+    .card-media {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .card:hover .card-media img { transform: scale(1.06); }
+
+    .card-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 50%, rgba(8,8,8,0.55) 100%);
+      pointer-events: none;
+    }
+
+    .card-content {
+      padding: 20px 22px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.18;
+      color: #fff;
+    }
+
+    .card-sub {
+      font-size: 13.5px;
+      color: var(--text-2);
+      line-height: 1.5;
+      font-weight: 400;
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      align-self: flex-start;
+      margin-top: 10px;
+      padding: 10px 22px;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 13.5px;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1.5px solid var(--line-strong);
+      transition: all 280ms ease;
+    }
+
+    .card:hover .btn-ghost {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: rgba(26,110,255,0.05);
+      box-shadow: 0 0 20px rgba(26,110,255,0.20);
+    }
+
+    .btn-ghost svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 280ms ease;
+    }
+
+    .card:hover .btn-ghost svg { transform: translateX(3px); }
+
+    /* ═══════════════════════════════════════════════════
+       CARD FEATURED
+    ═══════════════════════════════════════════════════ */
+    .card.featured {
+      border-color: rgba(26,110,255,0.25);
+      box-shadow:
+        0 0 30px rgba(26,110,255,0.14),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .card.featured:hover {
+      border-color: rgba(26,110,255,0.45);
+      box-shadow:
+        0 20px 50px rgba(0,0,0,0.55),
+        0 0 40px rgba(26,110,255,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.10);
+    }
+
+    .agentes-gallery {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      padding: 0 14px 14px;
+    }
+
+    .agente-thumb {
+      position: relative;
+      aspect-ratio: 9 / 14;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+      transition: transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 280ms ease;
+    }
+
+    .agente-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+    }
+
+    .agente-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.6) 100%);
+    }
+
+    .card.featured:hover .agente-thumb {
+      border-color: rgba(26,110,255,0.30);
+    }
+
+    .agente-thumb:hover {
+      transform: translateY(-4px) scale(1.04);
+      border-color: rgba(26,110,255,0.55) !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 16px rgba(26,110,255,0.22);
+      z-index: 2;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       CARD LIGHT (inversão)
+    ═══════════════════════════════════════════════════ */
+    .card-light {
+      background: var(--cream);
+      backdrop-filter: none;
+      border: 1px solid rgba(26,110,255,0.08);
+      color: var(--ink);
+      box-shadow:
+        0 24px 60px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.6);
+    }
+
+    .card-light:hover {
+      background: #e8f0ff;
+      transform: translateY(-3px);
+      box-shadow:
+        0 28px 70px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(26,110,255,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.7);
+    }
+
+    .card-light .card-content {
+      padding: 32px 28px 28px;
+    }
+
+    .card-light .card-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--blue);
+      margin-bottom: 4px;
+    }
+
+    .card-light .card-title {
+      color: var(--ink);
+      font-size: 28px;
+      font-weight: 900;
+    }
+
+    .card-light .card-sub {
+      color: #334;
+      font-size: 14.5px;
+      line-height: 1.55;
+      max-width: 360px;
+    }
+
+    .btn-solid {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      align-self: flex-start;
+      margin-top: 16px;
+      padding: 14px 28px;
+      border-radius: 100px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.01em;
+      color: #fff;
+      background: linear-gradient(135deg, var(--blue) 0%, var(--blue-2) 100%);
+      border: none;
+      box-shadow:
+        0 10px 28px rgba(26,110,255,0.35),
+        inset 0 1px 0 rgba(255,255,255,0.20);
+      transition: all 280ms ease;
+    }
+
+    .card-light:hover .btn-solid {
+      transform: translateY(-1px);
+      box-shadow:
+        0 14px 36px rgba(26,110,255,0.50),
+        inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    .btn-solid svg {
+      width: 14px; height: 14px;
+      transition: transform 280ms ease;
+    }
+
+    .card-light:hover .btn-solid svg { transform: translateX(3px); }
+
+    /* ═══════════════════════════════════════════════════
+       MENTORIA
+    ═══════════════════════════════════════════════════ */
+    .card-mentoria .card-media {
+      aspect-ratio: 16 / 9;
+      background: var(--cream);
+    }
+
+    .card-mentoria .card-media img {
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       YOUTUBE
+    ═══════════════════════════════════════════════════ */
+    .card-youtube .card-media { aspect-ratio: 16 / 10; }
+
+    .yt-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .yt-play {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(255,255,255,0.20);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+
+    .card-youtube:hover .yt-play {
+      transform: scale(1.08);
+      background: var(--blue);
+      border-color: var(--blue);
+      box-shadow: 0 10px 30px rgba(26,110,255,0.55);
+    }
+
+    .yt-play svg {
+      width: 20px;
+      height: 20px;
+      fill: #fff;
+      margin-left: 3px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════ */
+    .footer {
+      margin-top: 8px;
+      padding: 28px 22px 32px;
+      background: #000;
+      border-radius: 20px 20px 0 0;
+      text-align: left;
+    }
+
+    .footer-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+      margin-bottom: 4px;
+    }
+
+    .footer-copy {
+      font-size: 12.5px;
+      color: var(--muted);
+      font-weight: 400;
+    }
+
+    /* RESPONSIVE */
+    @media (min-width: 560px) {
+      .container { padding-top: 48px; }
+      .manifesto { font-size: 38px; max-width: 460px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+
+    /* Banner wide para o card principal */
+    .card-media-banner {
+      aspect-ratio: 16 / 7 !important;
+    }
+
+    .card-media-banner img {
+      object-position: center 20%;
+    }
+
+    /* Placeholder para imagens faltando */
+    .card-media img[src=""],
+    .card-media img:not([src]) {
+      display: none;
+    }
+
+    .placeholder-img {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .agente-thumb .placeholder-small {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(160deg, #0d1a35, #0a0f1e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: rgba(26,110,255,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient" aria-hidden="true"></div>
+
+  <main class="container">
+
+    <!-- ═══════ HERO ═══════ -->
+    <section class="hero">
+      <div class="hero-pill">
+        <img src="fotos/perfil.jpg" alt="Lucas Aragão" onerror="this.style.background='linear-gradient(135deg,#1a6eff,#5599ff)';this.src='data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'" />
+        <span class="pill-name">Lucas Aragão</span>
+        <svg class="verified" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path fill="#1a6eff" d="M22 11l-2.5-2.9.4-3.8-3.8-.8L14.1 0 11 1.5 7.9 0 6 3.5 2.1 4.3 2.5 8.1 0 11l2.5 2.9-.4 3.8 3.8.8L7.9 22 11 20.5 14.1 22 16 18.5l3.8-.8-.4-3.8L22 11Z"/>
+          <path fill="#fff" d="m9.4 14.6-3-3 1.4-1.4 1.6 1.6 4.8-4.8 1.4 1.4-6.2 6.2Z"/>
+        </svg>
+        <span class="pill-divider">|</span>
+        <span class="pill-role">Creator & Empreendedor</span>
+      </div>
+
+      <h1 class="manifesto">"Criatividade sem negócios é uma perda de tempo."</h1>
+      <p class="welcome">Seja bem-vindo(a).</p>
+    </section>
+
+    <!-- ═══════ 1. CARD FEATURED ═══════ -->
+    <a class="card featured" href="#" target="_blank" rel="noopener">
+      <div class="card-media card-media-banner">
+        <img src="fotos/aicp.jpg" alt="InfinityIA — Área de Membros" loading="eager" />
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">InfinityIA</h2>
+        <p class="card-sub">A máquina de conteúdo com IA. Crie sua Influencer IA, imagens realistas, vídeos virais e muito mais.</p>
+        <span class="btn-ghost">
+          Acessar treinamento
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+      <div class="agentes-gallery">
+        <div class="agente-thumb"><img src="fotos/agentes/mod1.jpg" alt="" loading="lazy" /></div>
+        <div class="agente-thumb"><img src="fotos/agentes/mod2.jpg" alt="" loading="lazy" /></div>
+        <div class="agente-thumb"><img src="fotos/agentes/mod3.jpg" alt="" loading="lazy" /></div>
+        <div class="agente-thumb"><img src="fotos/agentes/mod4.jpg" alt="" loading="lazy" /></div>
+        <div class="agente-thumb"><img src="fotos/agentes/mod5.jpg" alt="" loading="lazy" /></div>
+      </div>
+    </a>
+
+
+    <!-- ═══════ 3. SERVIÇOS (LIGHT INVERSION) ═══════ -->
+    <a class="card card-light" href="#" onclick="openForm('servicos'); return false;">
+      <div class="card-content">
+        <span class="card-eyebrow">Faço por você</span>
+        <h2 class="card-title">Serviços</h2>
+        <p class="card-sub">O resultado trabalhando por você, enquanto você foca no que importa. Deixe a gente cuidar de tudo de ponta a ponta — estratégia, produção e entrega — com o melhor que existe.</p>
+        <span class="btn-solid">
+          Contratar Serviços
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- ═══════ 4. MENTORIA INDIVIDUAL ═══════ -->
+    <a class="card card-mentoria" href="#" onclick="openForm('mentoria'); return false;">
+      <div class="card-media">
+        <img src="fotos/mentoria1x1.jpg" alt="Mentoria Individual" loading="lazy" />
+      </div>
+      <div class="card-content">
+        <h2 class="card-title">Mentoria Individual</h2>
+        <p class="card-sub">Acompanhamento direto comigo. Vagas limitadas, processo seletivo.</p>
+        <span class="btn-ghost">
+          Preencher formulário
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </div>
+    </a>
+
+
+    <!-- ═══════ FOOTER ═══════ -->
+    <footer class="footer">
+      <div class="footer-name">Lucas Aragão</div>
+      <div class="footer-copy">© 2026</div>
+    </footer>
+
+  </main>
+
+  <!-- ═══════ MODAL FORMULÁRIO ═══════ -->
+  <div class="fm-overlay" id="fmOverlay" onclick="overlayClick(event)">
+    <div class="fm-card" id="fmCard">
+
+      <button class="fm-close" onclick="closeForm()" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+
+      <!-- cabeçalho fixo -->
+      <div class="fm-head">
+        <div class="fm-progress-track"><div class="fm-progress-bar" id="fmBar"></div></div>
+        <p class="fm-step-info" id="fmStepInfo"></p>
+        <h2 class="fm-title" id="fmTitle"></h2>
+        <p class="fm-subtitle" id="fmSubtitle"></p>
+      </div>
+
+      <!-- corpo dinâmico -->
+      <div class="fm-body" id="fmBody"></div>
+
+      <!-- ações -->
+      <div class="fm-actions" id="fmActions"></div>
+    </div>
+  </div>
+
+  <style>
+    /* ═══ MODAL ═══ */
+    .fm-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex; align-items: flex-end; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity 320ms ease;
+    }
+    .fm-overlay.open {
+      opacity: 1; pointer-events: all;
+    }
+    .fm-card {
+      position: relative;
+      width: 100%; max-width: 520px;
+      background: #0d0d0d;
+      border: 1px solid rgba(255,255,255,0.10);
+      border-bottom: none;
+      border-radius: 24px 24px 0 0;
+      padding: 32px 24px 40px;
+      display: flex; flex-direction: column; gap: 0;
+      transform: translateY(40px);
+      transition: transform 360ms cubic-bezier(0.2,0.8,0.2,1);
+      max-height: 92dvh;
+      overflow-y: auto;
+    }
+    .fm-overlay.open .fm-card { transform: translateY(0); }
+
+    .fm-close {
+      position: absolute; top: 16px; right: 16px;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      color: #aaa; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 200ms;
+    }
+    .fm-close:hover { background: rgba(255,255,255,0.12); color: #fff; }
+    .fm-close svg { width: 16px; height: 16px; }
+
+    .fm-head { margin-bottom: 28px; }
+
+    .fm-progress-track {
+      width: 100%; height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 99px; margin-bottom: 16px; overflow: hidden;
+    }
+    .fm-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #1a6eff, #5599ff);
+      border-radius: 99px;
+      transition: width 380ms cubic-bezier(0.2,0.8,0.2,1);
+    }
+
+    .fm-step-info {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: #1a6eff; margin-bottom: 8px;
+    }
+    .fm-title {
+      font-size: 22px; font-weight: 800;
+      letter-spacing: -0.025em; color: #fff;
+      margin-bottom: 6px;
+    }
+    .fm-subtitle {
+      font-size: 13.5px; color: #7a7a7a; line-height: 1.5;
+    }
+
+    .fm-body { margin-bottom: 24px; }
+
+    .fm-question {
+      font-size: 17px; font-weight: 700;
+      color: #fff; margin-bottom: 16px; line-height: 1.35;
+      letter-spacing: -0.01em;
+    }
+
+    .fm-input, .fm-textarea {
+      width: 100%; background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      border-radius: 14px; color: #fff;
+      font-family: inherit; font-size: 15px; font-weight: 400;
+      outline: none; transition: border-color 220ms, box-shadow 220ms;
+    }
+    .fm-input { padding: 14px 16px; }
+    .fm-textarea { padding: 14px 16px; resize: none; min-height: 120px; line-height: 1.55; }
+    .fm-input::placeholder, .fm-textarea::placeholder { color: #555; }
+    .fm-input:focus, .fm-textarea:focus {
+      border-color: #1a6eff;
+      box-shadow: 0 0 0 3px rgba(26,110,255,0.15);
+    }
+
+    .fm-options { display: flex; flex-direction: column; gap: 10px; }
+    .fm-option {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 16px; border-radius: 14px;
+      background: rgba(255,255,255,0.04);
+      border: 1.5px solid rgba(255,255,255,0.10);
+      cursor: pointer; transition: all 220ms ease;
+      font-size: 15px; color: #ccc; font-weight: 500;
+      user-select: none;
+    }
+    .fm-option:hover { border-color: rgba(26,110,255,0.4); background: rgba(26,110,255,0.06); }
+    .fm-option.selected { border-color: #1a6eff; background: rgba(26,110,255,0.10); color: #fff; }
+    .fm-option-dot {
+      width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+      border: 2px solid rgba(255,255,255,0.20);
+      background: transparent;
+      transition: all 220ms ease;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fm-option.selected .fm-option-dot {
+      border-color: #1a6eff; background: #1a6eff;
+    }
+    .fm-option.selected .fm-option-dot::after {
+      content: ''; width: 8px; height: 8px;
+      border-radius: 50%; background: #fff;
+    }
+
+    .fm-actions { display: flex; gap: 10px; }
+
+    .fm-btn-next {
+      flex: 1; padding: 15px 24px;
+      border-radius: 100px; border: none; cursor: pointer;
+      font-family: inherit; font-size: 15px; font-weight: 700;
+      color: #fff;
+      background: linear-gradient(135deg, #1a6eff, #5599ff);
+      box-shadow: 0 8px 24px rgba(26,110,255,0.30);
+      transition: all 280ms ease;
+    }
+    .fm-btn-next:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(26,110,255,0.45); }
+    .fm-btn-next:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+    .fm-btn-back {
+      padding: 15px 20px; border-radius: 100px;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid rgba(255,255,255,0.12);
+      color: #888; cursor: pointer; font-family: inherit;
+      font-size: 15px; font-weight: 600;
+      transition: all 220ms ease;
+    }
+    .fm-btn-back:hover { color: #fff; border-color: rgba(255,255,255,0.25); }
+
+    .fm-error {
+      font-size: 12.5px; color: #ff5c5c; margin-top: 8px; font-weight: 500;
+    }
+
+    /* Tela de sucesso */
+    .fm-success {
+      text-align: center; padding: 16px 0 8px;
+      display: flex; flex-direction: column; align-items: center; gap: 16px;
+    }
+    .fm-success-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: rgba(26,110,255,0.12);
+      border: 1.5px solid rgba(26,110,255,0.30);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .fm-success-icon svg { width: 28px; height: 28px; color: #5599ff; }
+    .fm-success h3 { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .fm-success p { font-size: 14px; color: #7a7a7a; line-height: 1.55; max-width: 280px; }
+    .fm-success-close {
+      margin-top: 8px; padding: 13px 32px;
+      border-radius: 100px; border: 1.5px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04); color: #ccc;
+      font-family: inherit; font-size: 14px; font-weight: 600;
+      cursor: pointer; transition: all 220ms ease;
+    }
+    .fm-success-close:hover { color: #fff; border-color: rgba(255,255,255,0.30); }
+  </style>
+
+  <script>
+    const SUPA_URL = 'https://xnrldkzgdvadyroubqiq.supabase.co'
+    const SUPA_KEY = 'sb_publishable_-lpLCTzkWXSUMtRfO4ly-Q_mCDCM_JW'
+
+    // Cache dos configs buscados do Supabase
+    const configCache = {}
+
+    // Fallback caso o Supabase ainda não tenha a tabela
+    const FALLBACK = {
+      mentoria: {
+        titulo: 'Mentoria Individual',
+        subtitulo: 'Vagas limitadas. Preencha com atenção — cada resposta conta.',
+        perguntas: [
+          { id: 'name',  label: 'Qual é o seu nome completo?',          tipo: 'text',     placeholder: 'Seu nome completo' },
+          { id: 'phone', label: 'Qual é o seu WhatsApp? (com DDD)',      tipo: 'tel',      placeholder: '(11) 99999-9999' },
+          { id: 'q1',   label: 'Por que você quer a mentoria agora?',    tipo: 'textarea', placeholder: 'Seja direto e honesto...' },
+          { id: 'q2',   label: 'Qual é o seu maior desafio hoje?',       tipo: 'textarea', placeholder: 'O que te impede de crescer?' },
+          { id: 'q3',   label: 'Você já investiu em mentoria antes?',    tipo: 'opcoes',   opcoes: ['Sim', 'Não'] },
+        ]
+      },
+      servicos: {
+        titulo: 'Prestação de Serviços',
+        subtitulo: 'Conta sobre o seu projeto — quanto mais detalhe, melhor.',
+        perguntas: [
+          { id: 'name',  label: 'Qual é o seu nome completo?',           tipo: 'text',     placeholder: 'Seu nome completo' },
+          { id: 'phone', label: 'Qual é o seu WhatsApp? (com DDD)',       tipo: 'tel',      placeholder: '(11) 99999-9999' },
+          { id: 'q1',   label: 'O que você precisa?',                     tipo: 'opcoes',   opcoes: ['Clone IA', 'Edição de vídeo', 'Conteúdo com IA', 'Outro'] },
+          { id: 'q2',   label: 'Descreva o seu projeto ou necessidade',   tipo: 'textarea', placeholder: 'Detalhe tudo aqui...' },
+          { id: 'q3',   label: 'Qual o seu orçamento disponível?',        tipo: 'text',     placeholder: 'Ex: R$ 2.000 – R$ 5.000' },
+        ]
+      }
+    }
+
+    async function fetchConfig(tipo) {
+      if (configCache[tipo]) return configCache[tipo]
+      try {
+        const res = await fetch(`${SUPA_URL}/rest/v1/form_config?form_type=eq.${tipo}&limit=1`, {
+          headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
+        })
+        if (!res.ok) throw new Error()
+        const [data] = await res.json()
+        if (data) { configCache[tipo] = data; return data }
+      } catch {}
+      return FALLBACK[tipo]
+    }
+
+    // ── estado ────────────────────────────────────────────────────
+    let formType = null
+    let currentStep = 0
+    let respostas = {}
+    let activeConfig = null
+
+    async function openForm(tipo) {
+      formType = tipo
+      currentStep = 0
+      respostas = {}
+      document.getElementById('fmOverlay').classList.add('open')
+      document.body.style.overflow = 'hidden'
+      document.getElementById('fmBody').innerHTML = '<div style="padding:40px 0;text-align:center;color:#555;font-size:14px">Carregando...</div>'
+      document.getElementById('fmActions').innerHTML = ''
+      activeConfig = await fetchConfig(tipo)
+      renderStep()
+    }
+
+    function closeForm() {
+      document.getElementById('fmOverlay').classList.remove('open')
+      document.body.style.overflow = ''
+    }
+
+    function overlayClick(e) {
+      if (e.target === document.getElementById('fmOverlay')) closeForm()
+    }
+
+    function renderStep() {
+      const form = activeConfig
+      const total = form.perguntas.length
+      const pct = ((currentStep) / total) * 100
+
+      document.getElementById('fmBar').style.width = pct + '%'
+      document.getElementById('fmStepInfo').textContent = `Pergunta ${currentStep + 1} de ${total}`
+      document.getElementById('fmTitle').textContent = form.titulo
+      document.getElementById('fmSubtitle').textContent = form.subtitulo
+
+      const p = form.perguntas[currentStep]
+      const body = document.getElementById('fmBody')
+      const actions = document.getElementById('fmActions')
+
+      body.innerHTML = `<p class="fm-question">${p.label}</p>${buildInput(p)}`
+      actions.innerHTML = buildActions()
+
+      // Restaurar valor salvo
+      const val = respostas[p.id]
+      if (p.tipo === 'opcoes') {
+        if (val) {
+          document.querySelectorAll('.fm-option').forEach(el => {
+            if (el.dataset.val === val) el.classList.add('selected')
+          })
+        }
+      } else {
+        const el = document.getElementById('fm-field')
+        if (el && val) el.value = val
+        el && el.focus()
+      }
+    }
+
+    function applyPhoneMask(el) {
+      let v = el.value.replace(/\D/g, '').slice(0, 11)
+      if (v.length > 10) {
+        v = v.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3')
+      } else if (v.length > 6) {
+        v = v.replace(/^(\d{2})(\d{4})(\d*)$/, '($1) $2-$3')
+      } else if (v.length > 2) {
+        v = v.replace(/^(\d{2})(\d*)$/, '($1) $2')
+      } else if (v.length > 0) {
+        v = '(' + v
+      }
+      el.value = v
+    }
+
+    function buildInput(p) {
+      if (p.tipo === 'tel') {
+        return `<input id="fm-field" class="fm-input" type="tel" inputmode="numeric" placeholder="${p.placeholder}" autocomplete="off" oninput="applyPhoneMask(this)" onkeydown="if(event.key==='Enter')nextStep()" /><p class="fm-error" id="fmErr"></p>`
+      }
+      if (p.tipo === 'text') {
+        return `<input id="fm-field" class="fm-input" type="text" placeholder="${p.placeholder}" autocomplete="off" onkeydown="if(event.key==='Enter')nextStep()" /><p class="fm-error" id="fmErr"></p>`
+      }
+      if (p.tipo === 'textarea') {
+        return `<textarea id="fm-field" class="fm-textarea" placeholder="${p.placeholder}"></textarea><p class="fm-error" id="fmErr"></p>`
+      }
+      if (p.tipo === 'opcoes') {
+        const opts = p.opcoes.map(o =>
+          `<div class="fm-option" data-val="${o}" onclick="selectOption(this,'${p.id}')">
+             <div class="fm-option-dot"></div>${o}
+           </div>`
+        ).join('')
+        return `<div class="fm-options">${opts}</div><p class="fm-error" id="fmErr"></p>`
+      }
+      return ''
+    }
+
+    function buildActions() {
+      const back = currentStep > 0
+        ? `<button class="fm-btn-back" onclick="prevStep()">Voltar</button>`
+        : ''
+      const isLast = currentStep === activeConfig.perguntas.length - 1
+      const nextLabel = isLast ? 'Enviar formulário' : 'Continuar'
+      return `${back}<button class="fm-btn-next" id="fmNext" onclick="nextStep()">${nextLabel}</button>`
+    }
+
+    function selectOption(el, id) {
+      document.querySelectorAll('.fm-option').forEach(o => o.classList.remove('selected'))
+      el.classList.add('selected')
+      respostas[id] = el.dataset.val
+    }
+
+    function prevStep() {
+      if (currentStep > 0) { currentStep--; renderStep() }
+    }
+
+    async function nextStep() {
+      const p = activeConfig.perguntas[currentStep]
+      const errEl = document.getElementById('fmErr')
+
+      // Coletar valor
+      if (p.tipo === 'opcoes') {
+        if (!respostas[p.id]) { errEl.textContent = 'Selecione uma opção para continuar.'; return }
+      } else {
+        const field = document.getElementById('fm-field')
+        const val = field ? field.value.trim() : ''
+        if (!val) { errEl.textContent = 'Preencha este campo para continuar.'; return }
+        respostas[p.id] = val
+      }
+
+      const total = activeConfig.perguntas.length
+      if (currentStep < total - 1) {
+        currentStep++
+        renderStep()
+        return
+      }
+
+      // Último passo → enviar
+      const btn = document.getElementById('fmNext')
+      btn.disabled = true
+      btn.textContent = 'Enviando...'
+
+      const { name, phone, ...rest } = respostas
+      const answers = {}
+      activeConfig.perguntas.forEach(q => {
+        if (q.id !== 'name' && q.id !== 'phone') answers[q.label] = respostas[q.id] || ''
+      })
+
+      try {
+        const res = await fetch(`${SUPA_URL}/rest/v1/form_responses`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPA_KEY,
+            'Authorization': `Bearer ${SUPA_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({ form_type: formType, name, phone, answers })
+        })
+        if (!res.ok) throw new Error(await res.text())
+        showSuccess()
+      } catch (e) {
+        btn.disabled = false
+        btn.textContent = 'Enviar formulário'
+        document.getElementById('fmErr').textContent = 'Erro ao enviar. Tente novamente.'
+      }
+    }
+
+    function showSuccess() {
+      document.getElementById('fmBar').style.width = '100%'
+      document.getElementById('fmStepInfo').textContent = 'Concluído'
+      document.getElementById('fmTitle').textContent = ''
+      document.getElementById('fmSubtitle').textContent = ''
+      document.getElementById('fmBody').innerHTML = `
+        <div class="fm-success">
+          <div class="fm-success-icon">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <h3>Formulário enviado!</h3>
+          <p>Recebemos suas respostas. Entraremos em contato em breve pelo WhatsApp.</p>
+        </div>`
+      document.getElementById('fmActions').innerHTML = `<button class="fm-success-close" style="width:100%" onclick="closeForm()">Fechar</button>`
+    }
+  </script>
+</body>
+</html>

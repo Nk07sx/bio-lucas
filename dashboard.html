@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — Lucas Aragão</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:    #080808;
+      --bg2:   #0f0f0f;
+      --blue:  #1a6eff;
+      --blue2: #5599ff;
+      --text:  #ededed;
+      --sub:   #888;
+      --line:  rgba(255,255,255,0.08);
+      --card:  rgba(255,255,255,0.04);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      line-height: 1.55;
+    }
+
+    /* ── TELA DE LOGIN ── */
+    .login-screen {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .login-box {
+      width: 100%; max-width: 380px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 40px 32px;
+      display: flex; flex-direction: column; gap: 20px;
+    }
+    .login-logo {
+      font-size: 13px; font-weight: 700; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--blue); margin-bottom: 4px;
+    }
+    .login-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .login-sub   { font-size: 13px; color: var(--sub); }
+    .login-field {
+      width: 100%; padding: 13px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1.5px solid var(--line);
+      border-radius: 12px; color: #fff;
+      font-family: inherit; font-size: 15px;
+      outline: none; transition: border-color 200ms;
+    }
+    .login-field:focus { border-color: var(--blue); }
+    .login-btn {
+      width: 100%; padding: 14px;
+      border-radius: 100px; border: none; cursor: pointer;
+      font-family: inherit; font-size: 14px; font-weight: 700; color: #fff;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      box-shadow: 0 8px 20px rgba(26,110,255,0.30);
+      transition: all 260ms ease;
+    }
+    .login-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(26,110,255,0.45); }
+    .login-error { font-size: 12.5px; color: #ff5c5c; font-weight: 500; display: none; }
+
+    /* ── DASHBOARD ── */
+    .dash { display: none; }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--line);
+      position: sticky; top: 0; background: var(--bg); z-index: 10;
+    }
+    .topbar-left { display: flex; flex-direction: column; gap: 2px; }
+    .topbar-brand { font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); }
+    .topbar-title { font-size: 17px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .topbar-logout {
+      font-size: 12.5px; font-weight: 600; color: var(--sub);
+      background: none; border: 1px solid var(--line); border-radius: 100px;
+      padding: 6px 14px; cursor: pointer; transition: all 200ms;
+    }
+    .topbar-logout:hover { color: #fff; border-color: rgba(255,255,255,0.25); }
+
+    .dash-inner { padding: 24px; max-width: 960px; margin: 0 auto; }
+
+    /* stats */
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px; padding: 20px 18px;
+    }
+    .stat-label { font-size: 11px; font-weight: 600; letter-spacing: 0.10em; text-transform: uppercase; color: var(--sub); margin-bottom: 8px; }
+    .stat-value { font-size: 32px; font-weight: 900; color: #fff; letter-spacing: -0.03em; line-height: 1; }
+    .stat-card.blue { border-color: rgba(26,110,255,0.22); }
+    .stat-card.blue .stat-value { color: var(--blue2); }
+
+    /* filtros */
+    .filters { display: flex; gap: 8px; margin-bottom: 20px; }
+    .filter-btn {
+      padding: 8px 18px; border-radius: 100px;
+      font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+      border: 1.5px solid var(--line);
+      background: transparent; color: var(--sub);
+      transition: all 220ms ease;
+    }
+    .filter-btn.active {
+      background: rgba(26,110,255,0.12);
+      border-color: var(--blue);
+      color: var(--blue2);
+    }
+
+    /* lista de respostas */
+    .responses-list { display: flex; flex-direction: column; gap: 12px; }
+
+    .resp-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: border-color 220ms;
+    }
+    .resp-card:hover { border-color: rgba(255,255,255,0.14); }
+
+    .resp-header {
+      display: flex; align-items: center; gap: 14px;
+      padding: 16px 20px; cursor: pointer;
+      user-select: none;
+    }
+    .resp-avatar {
+      width: 38px; height: 38px; border-radius: 50%; flex-shrink: 0;
+      background: linear-gradient(135deg, rgba(26,110,255,0.25), rgba(85,153,255,0.15));
+      border: 1.5px solid rgba(26,110,255,0.25);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: var(--blue2);
+    }
+    .resp-info { flex: 1; min-width: 0; }
+    .resp-name { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .resp-meta { display: flex; align-items: center; gap: 10px; }
+    .resp-phone { font-size: 12.5px; color: var(--sub); }
+    .resp-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 100px;
+    }
+    .badge-mentoria { background: rgba(26,110,255,0.14); color: var(--blue2); border: 1px solid rgba(26,110,255,0.25); }
+    .badge-servicos { background: rgba(139,92,246,0.14); color: #a78bfa; border: 1px solid rgba(139,92,246,0.25); }
+    .resp-date { font-size: 11.5px; color: #555; white-space: nowrap; }
+    .resp-chevron {
+      width: 20px; height: 20px; color: var(--sub); flex-shrink: 0;
+      transition: transform 280ms ease;
+    }
+    .resp-card.open .resp-chevron { transform: rotate(180deg); }
+
+    .resp-answers {
+      display: none;
+      padding: 0 20px 20px;
+      border-top: 1px solid var(--line);
+    }
+    .resp-card.open .resp-answers { display: block; }
+
+    .answer-item { padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .answer-item:last-child { border-bottom: none; }
+    .answer-q { font-size: 11.5px; font-weight: 600; color: var(--sub); margin-bottom: 6px; letter-spacing: 0.02em; }
+    .answer-a { font-size: 14px; color: #ddd; line-height: 1.55; }
+
+    /* empty */
+    .empty-state {
+      text-align: center; padding: 60px 24px;
+      color: var(--sub); font-size: 14px;
+    }
+    .empty-state strong { display: block; color: #555; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+
+    /* loading */
+    .loading { text-align: center; padding: 40px; color: var(--sub); font-size: 14px; }
+
+    @media (max-width: 520px) {
+      .stats { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .stat-value { font-size: 24px; }
+      .topbar { padding: 16px; }
+      .dash-inner { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <p class="login-logo">Lucas Aragão</p>
+      <h1 class="login-title">Dashboard</h1>
+      <p class="login-sub">Acesse para ver todas as respostas dos formulários.</p>
+      <input class="login-field" type="password" id="pwField" placeholder="Senha de acesso" onkeydown="if(event.key==='Enter')doLogin()" />
+      <p class="login-error" id="loginErr">Senha incorreta. Tente novamente.</p>
+      <button class="login-btn" onclick="doLogin()">Entrar</button>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="dash" id="dashScreen">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-brand">Dashboard</span>
+        <span class="topbar-title">Formulários</span>
+      </div>
+      <button class="topbar-logout" onclick="logout()">Sair</button>
+    </div>
+
+    <div class="dash-inner">
+      <!-- Stats -->
+      <div class="stats" id="statsRow">
+        <div class="stat-card"><p class="stat-label">Total</p><p class="stat-value" id="statTotal">—</p></div>
+        <div class="stat-card blue"><p class="stat-label">Mentoria</p><p class="stat-value" id="statMentoria">—</p></div>
+        <div class="stat-card blue"><p class="stat-label">Serviços</p><p class="stat-value" id="statServicos">—</p></div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filters">
+        <button class="filter-btn active" onclick="setFilter('all', this)">Todos</button>
+        <button class="filter-btn" onclick="setFilter('mentoria', this)">Mentoria</button>
+        <button class="filter-btn" onclick="setFilter('servicos', this)">Serviços</button>
+      </div>
+
+      <!-- Lista -->
+      <div class="responses-list" id="responsesList">
+        <div class="loading">Carregando respostas...</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const SUPA_URL     = 'https://xnrldkzgdvadyroubqiq.supabase.co'
+    const SERVICE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhucmxka3pnZHZhZHlyb3VicWlxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTY4MzUyNSwiZXhwIjoyMDk3MjU5NTI1fQ.STCmt25kciAY_RcOULdUn7eoN3_0NyWS5MgjD2OPJ18'
+    const SENHA        = 'lucas2026'   // ← mude aqui para a sua senha
+
+    let allData = []
+    if (localStorage.getItem('bio_auth') === '1') { document.getElementById('loginScreen').style.display='none'; document.getElementById('dashScreen').style.display='block'; loadData() }
+    let activeFilter = 'all'
+
+    function doLogin() {
+      const pw = document.getElementById('pwField').value
+      if (pw === SENHA) {
+        localStorage.setItem('bio_auth','1'); document.getElementById('loginScreen').style.display = 'none'
+        document.getElementById('dashScreen').style.display = 'block'
+        loadData()
+      } else {
+        document.getElementById('loginErr').style.display = 'block'
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem('bio_auth'); document.getElementById('loginScreen').style.display = 'flex'
+      document.getElementById('dashScreen').style.display = 'none'
+      document.getElementById('pwField').value = ''
+    }
+
+    async function loadData() {
+      try {
+        const res = await fetch(`${SUPA_URL}/rest/v1/form_responses?order=created_at.desc`, {
+          headers: {
+            'apikey': SERVICE_KEY,
+            'Authorization': `Bearer ${SERVICE_KEY}`
+          }
+        })
+        if (!res.ok) throw new Error(await res.text())
+        allData = await res.json()
+        renderStats()
+        renderList()
+      } catch (e) {
+        document.getElementById('responsesList').innerHTML =
+          `<div class="empty-state"><strong>Erro ao carregar</strong>Verifique se a tabela foi criada no Supabase.<br><br><code style="font-size:11px;color:#555">${e.message}</code></div>`
+      }
+    }
+
+    function renderStats() {
+      const total    = allData.length
+      const mentoria = allData.filter(r => r.form_type === 'mentoria').length
+      const servicos = allData.filter(r => r.form_type === 'servicos').length
+      document.getElementById('statTotal').textContent    = total
+      document.getElementById('statMentoria').textContent = mentoria
+      document.getElementById('statServicos').textContent = servicos
+    }
+
+    function setFilter(f, btn) {
+      activeFilter = f
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'))
+      btn.classList.add('active')
+      renderList()
+    }
+
+    function renderList() {
+      const list = document.getElementById('responsesList')
+      const filtered = activeFilter === 'all'
+        ? allData
+        : allData.filter(r => r.form_type === activeFilter)
+
+      if (!filtered.length) {
+        list.innerHTML = `<div class="empty-state"><strong>Nenhuma resposta ainda</strong>Quando alguém preencher o formulário, aparece aqui.</div>`
+        return
+      }
+
+      list.innerHTML = filtered.map((r, i) => {
+        const initial = (r.name || '?')[0].toUpperCase()
+        const date    = new Date(r.created_at).toLocaleDateString('pt-BR', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
+        const badge   = r.form_type === 'mentoria'
+          ? '<span class="resp-badge badge-mentoria">Mentoria</span>'
+          : '<span class="resp-badge badge-servicos">Serviços</span>'
+        const answers = r.answers || {}
+        const ansHtml = Object.entries(answers).map(([q, a]) =>
+          `<div class="answer-item">
+             <p class="answer-q">${q}</p>
+             <p class="answer-a">${a || '<span style="color:#444">—</span>'}</p>
+           </div>`
+        ).join('')
+
+        return `
+          <div class="resp-card" id="rc${i}">
+            <div class="resp-header" onclick="toggleCard('rc${i}')">
+              <div class="resp-avatar">${initial}</div>
+              <div class="resp-info">
+                <p class="resp-name">${r.name || 'Sem nome'}</p>
+                <div class="resp-meta">
+                  <span class="resp-phone">${r.phone || '—'}</span>
+                  ${badge}
+                </div>
+              </div>
+              <span class="resp-date">${date}</span>
+              <svg class="resp-chevron" viewBox="0 0 24 24" fill="none">
+                <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <div class="resp-answers">${ansHtml || '<p class="answer-q">Sem respostas adicionais.</p>'}</div>
+          </div>`
+      }).join('')
+    }
+
+    function toggleCard(id) {
+      document.getElementById(id).classList.toggle('open')
+    }
+  </script>
+
+</body>
+</html>

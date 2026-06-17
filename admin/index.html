@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Formulários</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg:   #080808; --bg2: #0f0f0f; --bg3: #141414;
+      --blue: #1a6eff; --blue2: #5599ff;
+      --text: #ededed; --sub: #777; --muted: #444;
+      --line: rgba(255,255,255,0.08); --line2: rgba(255,255,255,0.13);
+      --card: rgba(255,255,255,0.04);
+      --red:  #ff4444; --green: #22c55e;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg); color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh; line-height: 1.55;
+    }
+
+    /* ── LOGIN ── */
+    .login-screen {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center; padding: 24px;
+    }
+    .login-box {
+      width: 100%; max-width: 360px;
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 20px; padding: 40px 28px;
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    .login-logo { font-size: 11px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); }
+    .login-title { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .login-sub { font-size: 13px; color: var(--sub); margin-top: -4px; }
+    .inp {
+      width: 100%; padding: 13px 16px;
+      background: rgba(255,255,255,0.05); border: 1.5px solid var(--line);
+      border-radius: 12px; color: #fff; font-family: inherit; font-size: 15px;
+      outline: none; transition: border-color 200ms;
+    }
+    .inp:focus { border-color: var(--blue); }
+    .inp::placeholder { color: var(--muted); }
+    .btn-primary {
+      width: 100%; padding: 14px; border-radius: 100px; border: none;
+      cursor: pointer; font-family: inherit; font-size: 14px; font-weight: 700; color: #fff;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      box-shadow: 0 8px 20px rgba(26,110,255,.28);
+      transition: all 240ms ease;
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 12px 28px rgba(26,110,255,.42); }
+    .btn-primary:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+    .login-error { font-size: 12.5px; color: var(--red); font-weight: 500; display: none; }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 24px; border-bottom: 1px solid var(--line);
+      position: sticky; top: 0; background: var(--bg); z-index: 20;
+    }
+    .topbar-left { display: flex; flex-direction: column; gap: 1px; }
+    .topbar-brand { font-size: 10.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--blue); }
+    .topbar-title { font-size: 16px; font-weight: 800; color: #fff; letter-spacing: -0.02em; }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .btn-ghost-sm {
+      padding: 7px 16px; border-radius: 100px; font-family: inherit;
+      font-size: 12.5px; font-weight: 600; cursor: pointer;
+      background: transparent; border: 1px solid var(--line); color: var(--sub);
+      transition: all 200ms;
+    }
+    .btn-ghost-sm:hover { color: #fff; border-color: var(--line2); }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 4px; padding: 20px 24px 0; }
+    .tab {
+      padding: 9px 22px; border-radius: 100px; font-family: inherit;
+      font-size: 13.5px; font-weight: 600; cursor: pointer;
+      border: 1.5px solid var(--line); background: transparent; color: var(--sub);
+      transition: all 220ms ease;
+    }
+    .tab.active { background: rgba(26,110,255,.12); border-color: var(--blue); color: var(--blue2); }
+
+    /* ── CONTENT ── */
+    .content { padding: 24px; max-width: 680px; margin: 0 auto; }
+
+    /* Cabeçalho do form */
+    .section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--sub); margin-bottom: 8px;
+    }
+    .field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+    .field-label { font-size: 13px; font-weight: 600; color: #ccc; }
+    .field-hint { font-size: 11.5px; color: var(--muted); }
+
+    /* ── PERGUNTAS ── */
+    .q-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+
+    .q-item {
+      background: var(--bg2); border: 1px solid var(--line);
+      border-radius: 14px; overflow: hidden;
+      transition: border-color 220ms;
+    }
+    .q-item:hover { border-color: var(--line2); }
+    .q-item.editing { border-color: var(--blue); }
+
+    .q-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 14px 16px; cursor: default;
+    }
+    .q-handle { display: flex; flex-direction: column; gap: 2px; cursor: grab; flex-shrink: 0; opacity: .35; }
+    .q-handle span { display: block; width: 16px; height: 1.5px; background: #fff; border-radius: 99px; }
+    .q-handle:active { cursor: grabbing; }
+
+    .q-num {
+      width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+      background: rgba(26,110,255,.14); border: 1px solid rgba(26,110,255,.25);
+      font-size: 10.5px; font-weight: 700; color: var(--blue2);
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .q-label { flex: 1; font-size: 14px; font-weight: 500; color: #ddd; min-width: 0; }
+    .q-label-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
+    .q-type-badge {
+      font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 6px; flex-shrink: 0;
+      background: rgba(255,255,255,.06); color: var(--sub);
+    }
+
+    .q-actions { display: flex; gap: 4px; flex-shrink: 0; }
+    .q-btn {
+      width: 30px; height: 30px; border-radius: 8px; border: none;
+      background: rgba(255,255,255,.05); color: var(--sub);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 180ms; font-size: 13px;
+    }
+    .q-btn:hover { background: rgba(255,255,255,.10); color: #fff; }
+    .q-btn.del:hover { background: rgba(255,68,68,.14); color: var(--red); }
+    .q-btn svg { width: 14px; height: 14px; }
+
+    /* Reorder btns */
+    .q-reorder { display: flex; flex-direction: column; gap: 2px; flex-shrink: 0; }
+    .q-reorder-btn {
+      width: 24px; height: 18px; border: none; border-radius: 5px;
+      background: rgba(255,255,255,.05); color: var(--sub);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 180ms; padding: 0;
+    }
+    .q-reorder-btn:hover { background: rgba(255,255,255,.10); color: #fff; }
+    .q-reorder-btn:disabled { opacity: .2; cursor: not-allowed; }
+    .q-reorder-btn svg { width: 10px; height: 10px; }
+
+    /* ── EDITOR DE PERGUNTA ── */
+    .q-editor {
+      padding: 16px; border-top: 1px solid var(--line);
+      display: flex; flex-direction: column; gap: 14px;
+      background: rgba(26,110,255,.03);
+    }
+    .editor-row { display: flex; gap: 12px; }
+    .editor-row > * { flex: 1; }
+    .select {
+      width: 100%; padding: 11px 14px;
+      background: rgba(255,255,255,.05); border: 1.5px solid var(--line);
+      border-radius: 10px; color: #fff; font-family: inherit; font-size: 14px;
+      outline: none; cursor: pointer; transition: border-color 200ms;
+      appearance: none; -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%23666' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+      padding-right: 36px;
+    }
+    .select:focus { border-color: var(--blue); }
+    .select option { background: #1a1a1a; color: #fff; }
+
+    .opcoes-area {
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .opcoes-textarea {
+      width: 100%; min-height: 80px; padding: 11px 14px;
+      background: rgba(255,255,255,.05); border: 1.5px solid var(--line);
+      border-radius: 10px; color: #fff; font-family: inherit; font-size: 14px;
+      outline: none; resize: none; line-height: 1.6;
+      transition: border-color 200ms;
+    }
+    .opcoes-textarea:focus { border-color: var(--blue); }
+    .opcoes-hint { font-size: 11.5px; color: var(--muted); }
+
+    .editor-actions { display: flex; gap: 8px; }
+    .btn-save-q {
+      padding: 9px 20px; border-radius: 100px; border: none; cursor: pointer;
+      font-family: inherit; font-size: 13px; font-weight: 700; color: #fff;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      transition: all 240ms;
+    }
+    .btn-save-q:hover { transform: translateY(-1px); }
+    .btn-cancel-q {
+      padding: 9px 16px; border-radius: 100px; cursor: pointer;
+      font-family: inherit; font-size: 13px; font-weight: 600; color: var(--sub);
+      background: transparent; border: 1.5px solid var(--line); transition: all 200ms;
+    }
+    .btn-cancel-q:hover { color: #fff; border-color: var(--line2); }
+
+    /* ── ADD PERGUNTA ── */
+    .btn-add {
+      display: flex; align-items: center; gap: 8px;
+      padding: 12px 18px; border-radius: 12px; cursor: pointer;
+      font-family: inherit; font-size: 13.5px; font-weight: 600; color: var(--blue2);
+      background: rgba(26,110,255,.07); border: 1.5px dashed rgba(26,110,255,.30);
+      transition: all 220ms; width: 100%; justify-content: center;
+    }
+    .btn-add:hover { background: rgba(26,110,255,.12); border-color: rgba(26,110,255,.55); }
+    .btn-add svg { width: 16px; height: 16px; }
+
+    /* ── SAVE BAR ── */
+    .save-bar {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 16px 24px; background: rgba(8,8,8,.9);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      z-index: 30;
+    }
+    .save-status { font-size: 13px; color: var(--sub); }
+    .save-status.ok   { color: var(--green); }
+    .save-status.err  { color: var(--red); }
+    .btn-save {
+      padding: 12px 32px; border-radius: 100px; border: none; cursor: pointer;
+      font-family: inherit; font-size: 14px; font-weight: 700; color: #fff;
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      box-shadow: 0 6px 18px rgba(26,110,255,.28);
+      transition: all 240ms;
+    }
+    .btn-save:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(26,110,255,.42); }
+    .btn-save:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+    .pb-80 { padding-bottom: 80px; }
+
+    /* Spinner */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,.3); border-top-color: #fff; border-radius: 50%; animation: spin .7s linear infinite; vertical-align: middle; margin-right: 6px; }
+
+    @media (max-width: 520px) {
+      .editor-row { flex-direction: column; }
+      .topbar { padding: 14px 16px; }
+      .content { padding: 16px; }
+      .tabs { padding: 16px 16px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── LOGIN ── -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-box">
+      <p class="login-logo">Lucas Aragão</p>
+      <h1 class="login-title">Admin</h1>
+      <p class="login-sub">Gerencie as perguntas dos formulários.</p>
+      <input class="inp" type="password" id="pwField" placeholder="Senha de acesso"
+             onkeydown="if(event.key==='Enter')doLogin()" />
+      <p class="login-error" id="loginErr">Senha incorreta.</p>
+      <button class="btn-primary" onclick="doLogin()">Entrar</button>
+    </div>
+  </div>
+
+  <!-- ── ADMIN ── -->
+  <div id="adminScreen" style="display:none">
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="topbar-brand">Admin</span>
+        <span class="topbar-title">Formulários</span>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-ghost-sm" onclick="window.open('index.html','_blank')">Ver site</button>
+        <button class="btn-ghost-sm" onclick="window.open('dashboard.html','_blank')">Dashboard</button>
+        <button class="btn-ghost-sm" onclick="logout()">Sair</button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" id="tabMentoria" onclick="switchTab('mentoria')">Mentoria 1x1</button>
+      <button class="tab" id="tabServicos"  onclick="switchTab('servicos')">Serviços</button>
+    </div>
+
+    <div class="content pb-80" id="mainContent">
+      <div style="padding:40px;text-align:center;color:var(--sub)">Carregando...</div>
+    </div>
+
+    <div class="save-bar">
+      <span class="save-status" id="saveStatus">Nenhuma alteração ainda.</span>
+      <button class="btn-save" id="saveBtn" onclick="saveConfig()">Salvar alterações</button>
+    </div>
+  </div>
+
+  <script>
+    const SUPA_URL    = 'https://xnrldkzgdvadyroubqiq.supabase.co'
+    const SERVICE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhucmxka3pnZHZhZHlyb3VicWlxIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTY4MzUyNSwiZXhwIjoyMDk3MjU5NTI1fQ.STCmt25kciAY_RcOULdUn7eoN3_0NyWS5MgjD2OPJ18'
+    const SENHA       = 'lucas2026'  // ← mesma do dashboard
+
+    let configs = {}       // { mentoria: {...}, servicos: {...} }
+    let activeTab = 'mentoria'
+    let editingIdx = null  // índice da pergunta em edição (-1 = nova)
+    let hasChanges = false
+    if (localStorage.getItem('bio_auth') === '1') { document.getElementById('loginScreen').style.display='none'; document.getElementById('adminScreen').style.display='block'; loadAll() }
+
+    // ── AUTH ──────────────────────────────────────────────────────
+    function doLogin() {
+      localStorage.setItem('bio_auth', '1')
+      if (document.getElementById('pwField').value === SENHA) {
+        document.getElementById('loginScreen').style.display = 'none'
+        document.getElementById('adminScreen').style.display = 'block'
+        loadAll()
+      } else {
+        document.getElementById('loginErr').style.display = 'block'
+      }
+    }
+    function logout() {
+      localStorage.removeItem('bio_auth')
+      document.getElementById('loginScreen').style.display = 'flex'
+      document.getElementById('adminScreen').style.display = 'none'
+      document.getElementById('pwField').value = ''
+    }
+
+    // ── LOAD ──────────────────────────────────────────────────────
+    async function loadAll() {
+      try {
+        const res = await fetch(`${SUPA_URL}/rest/v1/form_config`, {
+          headers: { 'apikey': SERVICE_KEY, 'Authorization': `Bearer ${SERVICE_KEY}` }
+        })
+        const rows = await res.json()
+        rows.forEach(r => {
+          configs[r.form_type] = {
+            titulo: r.titulo, subtitulo: r.subtitulo,
+            perguntas: Array.isArray(r.perguntas) ? r.perguntas : JSON.parse(r.perguntas)
+          }
+        })
+      } catch (e) {
+        setStatus('Erro ao carregar. Verifique se a tabela foi criada no Supabase.', 'err')
+      }
+      renderTab()
+    }
+
+    // ── TABS ──────────────────────────────────────────────────────
+    function switchTab(tab) {
+      if (editingIdx !== null) closeEditor()
+      activeTab = tab
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'))
+      document.getElementById(tab === 'mentoria' ? 'tabMentoria' : 'tabServicos').classList.add('active')
+      renderTab()
+    }
+
+    // ── RENDER ────────────────────────────────────────────────────
+    function renderTab() {
+      const cfg = configs[activeTab]
+      if (!cfg) {
+        document.getElementById('mainContent').innerHTML =
+          `<p style="color:var(--sub);font-size:14px;padding:40px 0;text-align:center">
+            Configure a tabela no Supabase primeiro e recarregue a página.
+           </p>`
+        return
+      }
+
+      const tipoLabel = { text:'Texto', tel:'Telefone', textarea:'Área de texto', opcoes:'Múltipla escolha' }
+
+      const qItems = cfg.perguntas.map((q, i) => {
+        const editing = editingIdx === i
+        const editorHtml = editing ? buildEditor(q, i) : ''
+        return `
+          <div class="q-item${editing ? ' editing' : ''}" id="qitem-${i}">
+            <div class="q-row">
+              <div class="q-num">${i + 1}</div>
+              <div class="q-label">
+                <span class="q-label-text">${q.label}</span>
+              </div>
+              <span class="q-type-badge">${tipoLabel[q.tipo] || q.tipo}</span>
+              <div class="q-reorder">
+                <button class="q-reorder-btn" onclick="moveQ(${i},-1)" ${i===0?'disabled':''} title="Mover para cima">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M18 15l-6-6-6 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+                </button>
+                <button class="q-reorder-btn" onclick="moveQ(${i},1)" ${i===cfg.perguntas.length-1?'disabled':''} title="Mover para baixo">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+              <div class="q-actions">
+                <button class="q-btn" onclick="toggleEdit(${i})" title="Editar">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+                <button class="q-btn del" onclick="deleteQ(${i})" title="Excluir">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                </button>
+              </div>
+            </div>
+            ${editorHtml}
+          </div>`
+      }).join('')
+
+      document.getElementById('mainContent').innerHTML = `
+        <div style="margin-bottom:28px">
+          <p class="section-title" style="margin-bottom:16px">Cabeçalho do formulário</p>
+          <div class="field-group">
+            <label class="field-label">Título</label>
+            <input class="inp" id="cfgTitulo" value="${esc(cfg.titulo)}" oninput="markChanged()" placeholder="Título do formulário" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">Subtítulo <span class="field-hint">(aparece abaixo do título)</span></label>
+            <input class="inp" id="cfgSubtitulo" value="${esc(cfg.subtitulo || '')}" oninput="markChanged()" placeholder="Ex: Vagas limitadas..." />
+          </div>
+        </div>
+
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+            <p class="section-title" style="margin-bottom:0">${cfg.perguntas.length} pergunta${cfg.perguntas.length!==1?'s':''}</p>
+          </div>
+          <div class="q-list" id="qList">
+            ${qItems}
+          </div>
+          <button class="btn-add" onclick="addQuestion()">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>
+            Nova pergunta
+          </button>
+        </div>`
+    }
+
+    function buildEditor(q, idx) {
+      const isNew = idx === -1
+      const opcoesTxt = (q.opcoes || []).join('\n')
+      return `
+        <div class="q-editor" id="qeditor">
+          <div class="field-group" style="margin:0">
+            <label class="field-label">Pergunta</label>
+            <input class="inp" id="eLabel" value="${esc(q.label)}" placeholder="Digite a pergunta aqui..." />
+          </div>
+          <div class="editor-row">
+            <div class="field-group" style="margin:0">
+              <label class="field-label">Tipo de resposta</label>
+              <select class="select" id="eTipo" onchange="onTipoChange()">
+                <option value="text"     ${q.tipo==='text'    ?'selected':''}>Texto curto</option>
+                <option value="tel"      ${q.tipo==='tel'     ?'selected':''}>Telefone / WhatsApp</option>
+                <option value="textarea" ${q.tipo==='textarea'?'selected':''}>Texto longo</option>
+                <option value="opcoes"   ${q.tipo==='opcoes'  ?'selected':''}>Múltipla escolha</option>
+              </select>
+            </div>
+            <div class="field-group" style="margin:0" id="ePlaceholderWrap" ${q.tipo==='opcoes'?'style="display:none"':''}>
+              <label class="field-label">Dica (placeholder)</label>
+              <input class="inp" id="ePlaceholder" value="${esc(q.placeholder||'')}" placeholder="Ex: Escreva aqui..." />
+            </div>
+          </div>
+          <div class="opcoes-area" id="eOpcoesWrap" ${q.tipo!=='opcoes'?'style="display:none"':''}>
+            <label class="field-label">Opções de resposta <span class="field-hint">— uma por linha</span></label>
+            <textarea class="opcoes-textarea" id="eOpcoes" placeholder="Sim&#10;Não&#10;Talvez">${opcoesTxt}</textarea>
+          </div>
+          <div class="editor-actions">
+            <button class="btn-save-q" onclick="saveQuestion(${idx})">Salvar pergunta</button>
+            <button class="btn-cancel-q" onclick="closeEditor()">Cancelar</button>
+          </div>
+        </div>`
+    }
+
+    // ── EDITOR ACTIONS ────────────────────────────────────────────
+    function toggleEdit(i) {
+      if (editingIdx === i) { closeEditor(); return }
+      editingIdx = i
+      renderTab()
+      document.getElementById(`qitem-${i}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+    }
+
+    function closeEditor() {
+      editingIdx = null
+      renderTab()
+    }
+
+    function onTipoChange() {
+      const tipo = document.getElementById('eTipo').value
+      document.getElementById('eOpcoesWrap').style.display      = tipo === 'opcoes' ? 'flex'  : 'none'
+      document.getElementById('ePlaceholderWrap').style.display = tipo === 'opcoes' ? 'none'  : 'block'
+    }
+
+    function saveQuestion(idx) {
+      const label = document.getElementById('eLabel').value.trim()
+      if (!label) { document.getElementById('eLabel').focus(); return }
+      const tipo  = document.getElementById('eTipo').value
+      const ph    = document.getElementById('ePlaceholder')?.value.trim() || ''
+      const opTxt = document.getElementById('eOpcoes')?.value || ''
+      const opcoes = opTxt.split('\n').map(s => s.trim()).filter(Boolean)
+
+      const q = { id: idx === -1 ? `q${Date.now()}` : configs[activeTab].perguntas[idx].id, label, tipo }
+      if (tipo !== 'opcoes') q.placeholder = ph
+      else q.opcoes = opcoes
+
+      if (idx === -1) configs[activeTab].perguntas.push(q)
+      else            configs[activeTab].perguntas[idx] = q
+
+      editingIdx = null
+      markChanged()
+      renderTab()
+    }
+
+    function addQuestion() {
+      editingIdx = -1
+      const emptyQ = { id: '', label: '', tipo: 'text', placeholder: '' }
+      configs[activeTab].perguntas.push(emptyQ)
+      const newIdx = configs[activeTab].perguntas.length - 1
+      editingIdx = newIdx
+      renderTab()
+      setTimeout(() => {
+        document.getElementById(`qitem-${newIdx}`)?.scrollIntoView({ behavior:'smooth', block:'nearest' })
+        document.getElementById('eLabel')?.focus()
+      }, 80)
+    }
+
+    function deleteQ(i) {
+      if (!confirm('Excluir esta pergunta?')) return
+      configs[activeTab].perguntas.splice(i, 1)
+      editingIdx = null
+      markChanged()
+      renderTab()
+    }
+
+    function moveQ(i, dir) {
+      const arr = configs[activeTab].perguntas
+      const ni = i + dir
+      if (ni < 0 || ni >= arr.length) return
+      ;[arr[i], arr[ni]] = [arr[ni], arr[i]]
+      editingIdx = null
+      markChanged()
+      renderTab()
+    }
+
+    // ── SAVE ──────────────────────────────────────────────────────
+    function markChanged() {
+      hasChanges = true
+      setStatus('Alterações não salvas.', '')
+    }
+
+    function setStatus(msg, type) {
+      const el = document.getElementById('saveStatus')
+      el.textContent = msg
+      el.className = 'save-status' + (type ? ` ${type}` : '')
+    }
+
+    async function saveConfig() {
+      // Capturar título e subtítulo do form atual
+      const titulo    = document.getElementById('cfgTitulo')?.value.trim()
+      const subtitulo = document.getElementById('cfgSubtitulo')?.value.trim()
+      if (titulo) configs[activeTab].titulo    = titulo
+      if (subtitulo !== undefined) configs[activeTab].subtitulo = subtitulo
+
+      const btn = document.getElementById('saveBtn')
+      btn.disabled = true
+      btn.innerHTML = '<span class="spin"></span>Salvando...'
+      setStatus('Salvando...', '')
+
+      try {
+        const res = await fetch(`${SUPA_URL}/rest/v1/form_config?form_type=eq.${activeTab}`, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SERVICE_KEY,
+            'Authorization': `Bearer ${SERVICE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            titulo:    configs[activeTab].titulo,
+            subtitulo: configs[activeTab].subtitulo,
+            perguntas: configs[activeTab].perguntas,
+            updated_at: new Date().toISOString()
+          })
+        })
+        if (!res.ok) throw new Error(await res.text())
+        hasChanges = false
+        setStatus('Salvo com sucesso.', 'ok')
+        setTimeout(() => setStatus('Nenhuma alteração pendente.', ''), 3000)
+      } catch (e) {
+        setStatus('Erro ao salvar. Tente novamente.', 'err')
+      } finally {
+        btn.disabled = false
+        btn.textContent = 'Salvar alterações'
+      }
+    }
+
+    // ── UTILS ─────────────────────────────────────────────────────
+    function esc(s) { return String(s).replace(/"/g,'&quot;').replace(/</g,'&lt;') }
+
+    window.addEventListener('beforeunload', e => {
+      if (hasChanges) { e.preventDefault(); e.returnValue = '' }
+    })
+  </script>
+</body>
+</html>
