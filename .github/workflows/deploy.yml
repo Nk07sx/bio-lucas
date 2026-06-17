@@ -13,7 +13,7 @@ jobs:
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ftp.infinityia.cloud
+          server: 45.132.157.155
           username: u417936031.deploygithub
           password: ${{ secrets.FTP_PASSWORD }}
           server-dir: /public_html/bio/
