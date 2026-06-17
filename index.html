@@ -1008,7 +1008,9 @@
              <div class="fm-option-dot"></div>${o}
            </div>`
         ).join('')
-        return `<div class="fm-options">${opts}</div><p class="fm-error" id="fmErr"></p>`
+        return `<div class="fm-options">${opts}</div>
+          <input id="fm-outro-field" class="fm-input" type="text" placeholder="Descreva o que você precisa..." style="display:none;margin-top:12px" />
+          <p class="fm-error" id="fmErr"></p>`
       }
       return ''
     }
@@ -1026,6 +1028,11 @@
       document.querySelectorAll('.fm-option').forEach(o => o.classList.remove('selected'))
       el.classList.add('selected')
       respostas[id] = el.dataset.val
+      const outroField = document.getElementById('fm-outro-field')
+      if (outroField) {
+        outroField.style.display = el.dataset.val === 'Outro' ? 'block' : 'none'
+        if (el.dataset.val === 'Outro') outroField.focus()
+      }
     }
 
     function prevStep() {
@@ -1039,6 +1046,12 @@
       // Coletar valor
       if (p.tipo === 'opcoes') {
         if (!respostas[p.id]) { errEl.textContent = 'Selecione uma opção para continuar.'; return }
+        const outroField = document.getElementById('fm-outro-field')
+        if (respostas[p.id] === 'Outro' && outroField) {
+          const outroVal = outroField.value.trim()
+          if (!outroVal) { errEl.textContent = 'Descreva o que você precisa.'; return }
+          respostas[p.id] = `Outro: ${outroVal}`
+        }
       } else {
         const field = document.getElementById('fm-field')
         const val = field ? field.value.trim() : ''

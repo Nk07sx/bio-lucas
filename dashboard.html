@@ -329,7 +329,7 @@
               <div class="resp-info">
                 <p class="resp-name">${r.name || 'Sem nome'}</p>
                 <div class="resp-meta">
-                  <span class="resp-phone">${r.phone || '—'}</span>
+                  <a class="resp-phone" href="https://wa.me/55${(r.phone||'').replace(/\D/g,'')}"\n                     target="_blank" style="color:var(--sub);text-decoration:none">${r.phone || '—'} 📲</a>
                   ${badge}
                 </div>
               </div>
