@@ -10,11 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: 45.132.157.155
-          username: u417936031.deploygithub
-          password: ${{ secrets.FTP_PASSWORD }}
-          server-dir: /public_html/bio/
-          dangerous-clean-slate: true
+      - name: Deploy via SSH rsync
+        run: |
+          sudo apt-get install -y sshpass rsync
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avzr --delete \
+            -e "ssh -p 65002 -o StrictHostKeyChecking=no" \
+            --exclude='.git' --exclude='.github' \
+            ./ u417936031@45.132.157.155:/home/u417936031/domains/infinityia.cloud/public_html/bio/
